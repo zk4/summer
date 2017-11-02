@@ -18,7 +18,7 @@ public class Param {
 
 
     public Long getLong(String id) {
-            return (Long) paramMap.get(id);
+            return Long.parseLong((String)paramMap.get(id));
     }
 
     public Map<String, Object> getParamMap() {

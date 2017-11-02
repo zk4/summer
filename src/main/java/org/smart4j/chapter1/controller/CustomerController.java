@@ -64,10 +64,12 @@ public View index(Param param){
         return new Data(customer);
     }
 
-    @Action("delete:/customer_edit")
+    @Action("get:/customer_delete")
     public View delete(Param param){
         Long id =param.getLong("id");
-        Boolean customer = customerService.deleteCustomer(id);
-        return new  View("customer_edit.jsp").addModel("customer",customer);
+        Boolean aBoolean = customerService.deleteCustomer(id);
+
+        List<Customer> customerList = customerService.getCustomerList();
+        return new View("customer.jsp").addModel("customerList",customerList);
     }
 }
