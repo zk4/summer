@@ -1,6 +1,7 @@
 package org.smart4j.chapter1.service;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.smart4j.chapter1.model.Customer;
 import org.smart4j.chapter1.util.DataBaseHelper;
@@ -12,6 +13,12 @@ import java.util.List;
  * Created by zk on 01/11/2017.
  */
 public class CustomerServiceTest {
+
+
+    @Before
+    public void setUp() throws Exception {
+        DataBaseHelper.executeSqlFile("sql/customer_init.sql");
+    }
 
     private final CustomerService customerService;
 
@@ -25,13 +32,13 @@ public class CustomerServiceTest {
         for (Customer customer : customerList) {
             System.out.println(customer);
         }
-        Assert.assertEquals(2,customerList.size());
+        Assert.assertEquals(3,customerList.size());
     }
 
     @Test
     public void getCustomer() throws Exception {
-        Long id =1L;
-        Customer customer = customerService.getCustomer(id);
+        List<Customer> customerList = customerService.getCustomerList();
+        Customer customer = customerService.getCustomer(customerList.get(0).getId());
         Assert.assertNotNull(customer);
     }
 
@@ -52,17 +59,18 @@ public class CustomerServiceTest {
 
     @Test
     public void updateCustomer() throws Exception {
-        Long id = 100L;
+        List<Customer> customerList = customerService.getCustomerList();
+
         HashMap<String, Object> filedMap = new HashMap<>();
         filedMap.put("contact","Eric");
-        boolean b = customerService.updateCustomer(id, filedMap);
+        boolean b = customerService.updateCustomer(customerList.get(0).getId(), filedMap);
         Assert.assertTrue(b);
     }
 
     @Test
     public void deleteCustomer() throws Exception {
-        Long id=100L;
-        boolean b = customerService.deleteCustomer(id);
+        List<Customer> customerList = customerService.getCustomerList();
+        boolean b = customerService.deleteCustomer(customerList.get(0).getId());
         Assert.assertTrue(b);
     }
 

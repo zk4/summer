@@ -24,8 +24,8 @@ public class CustomerService {
 
 
     public Customer getCustomer(Long id) {
-        //todo
-        return null;
+
+        return DataBaseHelper.getOneEntity(Customer.class,id);
     }
 
 
