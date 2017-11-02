@@ -1,4 +1,5 @@
-package aop.spring.aspectJ;
+package aop.spring.cutAnnotaion;
+
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
-public class GreetingAspect {
+public class GreetingAspect2 {
 
 
-    @Around("execution(* aop.spring.aspectJ.GreetingImpl.good*(..))")
+    @Around("@annotation(aop.spring.cutAnnotaion.Tag)")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         before();
         Object ret = pjp.proceed();
@@ -24,11 +25,11 @@ public class GreetingAspect {
     }
 
     public void before() {
-        System.out.println("GreetingAspect before");
+        System.out.println("tag before");
     }
 
     public void after() {
-        System.out.println("GreetingAspect after");
+        System.out.println("tag after");
     }
 
 
@@ -36,7 +37,7 @@ public class GreetingAspect {
 
 
             ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        GreetingImpl bean = (GreetingImpl) classPathXmlApplicationContext.getBean("aaa");
+        GreetingImpl2 bean = (GreetingImpl2) classPathXmlApplicationContext.getBean(GreetingImpl2.class);
 
             bean.sayHello("helo");
             bean.goodMorning("helo");

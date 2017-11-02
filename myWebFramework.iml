@@ -59,5 +59,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.0.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.0.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.0.1.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.aspectj:aspectjweaver:1.8.11" level="project" />
   </component>
 </module>
