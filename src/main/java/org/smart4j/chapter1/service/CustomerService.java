@@ -2,6 +2,7 @@ package org.smart4j.chapter1.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.smart4j.chapter1.annotation.Service;
 import org.smart4j.chapter1.model.Customer;
 import org.smart4j.chapter1.util.DataBaseHelper;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * Created by zk on 01/11/2017.
  */
+@Service
 public class CustomerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerService.class);
 
