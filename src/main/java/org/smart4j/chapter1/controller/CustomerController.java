@@ -36,6 +36,11 @@ public View index(Param param){
         List<Customer> customerList = customerService.getCustomerList();
         return new View("customer.jsp").addModel("customerList",customerList);
     }
+    @Action("get:/customer_json")
+    public Data getindex2(Param param){
+        List<Customer> customerList = customerService.getCustomerList();
+        return new Data(customerList);
+    }
 
     @Action("get:/customer_create")
     public View create(Param param){
