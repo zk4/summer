@@ -1,9 +1,11 @@
 package org.smart4j.framework.util;
 
+import org.smart4j.framework.annotation.Service;
 import org.smart4j.framework.aop.Aspect2;
 import org.smart4j.framework.aop.AspectProxy;
 import org.smart4j.framework.aop.Proxy;
 import org.smart4j.framework.aop.ProxyManager;
+import org.smart4j.framework.transaction.TransactionProxy;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -21,13 +23,14 @@ public final class AopHelper {
                 Class<?> targetClass = targetentry.getKey();
                 List<Proxy> proxyList = targetentry.getValue();
                 Object proxpy = ProxyManager.createProxpy(targetClass, proxyList);
-                BeanHelper.setBean(targetClass,proxpy);
+                BeanHelper.setBean(targetClass, proxpy);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     private static Set<Class<?>> createTargetClassSet(Aspect2 aspect) throws Exception {
         HashSet<Class<?>> targetClassSet = new HashSet<>();
         Class<? extends Annotation> annotation = aspect.value();
@@ -39,6 +42,12 @@ public final class AopHelper {
 
     private static Map<Class<?>, Set<Class<?>>> createProxyMap() throws Exception {
         HashMap proxyMap = new HashMap<Class<?>, Set<Class<?>>>();
+        addAspectPropxy(proxyMap);
+        addTransactionPropxy(proxyMap);
+        return proxyMap;
+    }
+
+    private static void addAspectPropxy(Map<Class<?>, Set<Class<?>>>  proxyMap) throws Exception {
         Set<Class<?>> proxyClassSet = ClassHelper.getClassSetBySuper(AspectProxy.class);
         for (Class<?> proxyClass : proxyClassSet) {
             if (proxyClass.isAnnotationPresent(Aspect2.class)) {
@@ -47,7 +56,13 @@ public final class AopHelper {
                 proxyMap.put(proxyClass, targetClassSet);
             }
         }
-        return proxyMap;
+    }
+
+    private static void addTransactionPropxy(Map<Class<?>, Set<Class<?>>>  proxyMap) throws Exception {
+        Set<Class<?>> classSetByAnnotation = ClassHelper.getClassSetByAnnotation(Service.class);
+        proxyMap.put(TransactionProxy.class, classSetByAnnotation);
+
+
     }
 
     private static Map<Class<?>, List<Proxy>> createTargetMap(Map<Class<?>, Set<Class<?>>> proxyMap) throws IllegalAccessException, InstantiationException {
@@ -68,5 +83,6 @@ public final class AopHelper {
         }
         return targetMap;
     }
+
 
 }

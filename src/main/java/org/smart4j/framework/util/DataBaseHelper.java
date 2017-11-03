@@ -30,7 +30,7 @@ public class DataBaseHelper {
     private static final String PASSWORD;
 
     private static final ThreadLocal<Connection> CONNECTION_HOLDER = new ThreadLocal<>();
-    private  static final BasicDataSource  DATA_SOURCE;
+    private static final BasicDataSource DATA_SOURCE;
 
     private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
@@ -41,7 +41,7 @@ public class DataBaseHelper {
         USERNAME = properties.getProperty("jdbc.username");
         PASSWORD = properties.getProperty("jdbc.password");
 
-        DATA_SOURCE=new BasicDataSource();
+        DATA_SOURCE = new BasicDataSource();
         DATA_SOURCE.setDriverClassName(DRIVER);
         DATA_SOURCE.setUrl(URL);
         DATA_SOURCE.setUsername(USERNAME);
@@ -74,7 +74,7 @@ public class DataBaseHelper {
     public static int executeUpdate(String sql, Object... params) {
         int rows = 0;
         try {
-            LOGGER.info("sql: {}",sql);
+            LOGGER.info("sql: {}", sql);
             Connection conn = getConnection();
 
             rows = QUERY_RUNNER.update(conn, sql, params);
@@ -92,45 +92,49 @@ public class DataBaseHelper {
         Connection connection = CONNECTION_HOLDER.get();
 
         try {
-            if (connection!=null)
+            if (connection != null)
                 connection.rollback();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public static <T> T getOneEntity(Class<T> entityClass,long id){
-        String sql="SELECT * FROM " + getTableName(entityClass) + " WHERE id=?";
+
+    public static <T> T getOneEntity(Class<T> entityClass, long id) {
+        String sql = "SELECT * FROM " + getTableName(entityClass) + " WHERE id=?";
         Connection connection = getConnection();
-        T t=null;
+        T t = null;
         try {
-          t=    QUERY_RUNNER.query(connection, sql, new BeanHandler<T>(entityClass),id);
+            t = QUERY_RUNNER.query(connection, sql, new BeanHandler<T>(entityClass), id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return t;
     }
-    public static <T> boolean deleteEntity(Class<T> entittyClass,long id){
-        String sql="DELETE FROM " + getTableName(entittyClass) + " WHERE id=?";
-        return executeUpdate(sql,id)==1;
+
+    public static <T> boolean deleteEntity(Class<T> entittyClass, long id) {
+        String sql = "DELETE FROM " + getTableName(entittyClass) + " WHERE id=?";
+        return executeUpdate(sql, id) == 1;
     }
-    public static <T> boolean updateEntity(Class<?> entityClass,long id,Map<String,Object> fieldMap){
+
+    public static <T> boolean updateEntity(Class<?> entityClass, long id, Map<String, Object> fieldMap) {
         if (fieldMap == null || fieldMap.size() == 0) {
             throw new RuntimeException("no field to insert");
         }
 
-        String sql="UPDATE "+ getTableName(entityClass) +" SET ";
+        String sql = "UPDATE " + getTableName(entityClass) + " SET ";
         StringBuilder columns = new StringBuilder();
         for (String fieldName : fieldMap.keySet()) {
             columns.append(fieldName).append("=?, ");
         }
-        sql +=columns.substring(0,columns.lastIndexOf(", "))+" WHERE id=?";
+        sql += columns.substring(0, columns.lastIndexOf(", ")) + " WHERE id=?";
         List<Object> paramList = new ArrayList<>();
         paramList.addAll(fieldMap.values());
         paramList.add(id);
         Object[] params = paramList.toArray();
 
-        return executeUpdate(sql,params)==1;
+        return executeUpdate(sql, params) == 1;
     }
+
     public static <T> boolean insertEntity(Class<T> entityClass, Map<String, Object> fieldMap) {
         if (fieldMap == null || fieldMap.size() == 0) {
             throw new RuntimeException("no field to insert");
@@ -162,20 +166,21 @@ public class DataBaseHelper {
                 conn = DATA_SOURCE.getConnection();
             } catch (SQLException e) {
                 LOGGER.error("get connection failure", e);
-            }finally {
+            } finally {
                 CONNECTION_HOLDER.set(conn);
             }
         }
         return conn;
     }
-    public static void executeSqlFile(String filePath){
+
+    public static void executeSqlFile(String filePath) {
         InputStream resourceAsStream =
                 Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
-        String sql=null;
+        String sql = null;
         try {
-            while((sql=bufferedReader.readLine())!=null){
-                    executeUpdate(sql);
+            while ((sql = bufferedReader.readLine()) != null) {
+                executeUpdate(sql);
             }
         } catch (IOException e) {
             LOGGER.error("sql: {}", sql);
@@ -183,7 +188,8 @@ public class DataBaseHelper {
 
         }
     }
-//    public static void closeConnection() {
+
+    //    public static void closeConnection() {
 //        Connection connection = CONNECTION_HOLDER.get();
 //        if (connection != null) {
 //            try {
@@ -196,4 +202,48 @@ public class DataBaseHelper {
 //
 //        }
 //    }
+    public static void beginTransaction() throws SQLException {
+        Connection conn = getConnection();
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(false);
+
+            } catch (SQLException e) {
+                LOGGER.error("beginTransaction failure: ", e);
+                throw  e;
+            } finally {
+                CONNECTION_HOLDER.set(conn);
+            }
+        }
+    }
+
+    public static void commitdTransaction() throws SQLException {
+        Connection conn = getConnection();
+        if (conn != null) {
+            try {
+                conn.commit();
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.error("commitdTransaction failure: ", e);
+                throw e;
+            } finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
+
+    public static void rollbackTransaction() throws SQLException {
+        Connection conn = getConnection();
+        if (conn != null) {
+            try {
+                conn.rollback();
+                conn.close();
+            } catch (SQLException e) {
+                LOGGER.error("rollbackTransaction failure: ", e);
+                throw e;
+            } finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
 }

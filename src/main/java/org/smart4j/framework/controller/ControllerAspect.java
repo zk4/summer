@@ -19,7 +19,7 @@ public class ControllerAspect extends AspectProxy {
 
     @Override
     public void after(Class<?> cls, Method method, Object[] params, Object result) {
-        LOGGER.debug("---------begin----------");
+        LOGGER.debug("---ControllerAspect------begin----------");
         LOGGER.debug(String.format("class: %s",cls.getName()));
         LOGGER.debug(String.format("method: %s",method.getName()));
         begin=System.currentTimeMillis();
@@ -29,6 +29,6 @@ public class ControllerAspect extends AspectProxy {
     @Override
     public void before(Class<?> cls, Method method, Object[] params) {
         LOGGER.debug(String.format("time: %dms",System.currentTimeMillis()-begin));
-        LOGGER.debug("---------end----------");
+        LOGGER.debug("---ControllerAspect------end----------");
     }
 }
