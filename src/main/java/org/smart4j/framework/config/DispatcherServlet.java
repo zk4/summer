@@ -39,12 +39,10 @@ public class DispatcherServlet extends HttpServlet {
 
         ServletRegistration aDefault = servletContext.getServletRegistration("default");
         aDefault.addMapping(ConfigHelper.getAppAssertPath() + "*");
+
     }
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-    }
+
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -109,6 +107,13 @@ public class DispatcherServlet extends HttpServlet {
                 }
             }
 
+        }else {
+            resp.setContentType("text/html");
+            resp.setCharacterEncoding("UTF-8");
+            PrintWriter writer = resp.getWriter();
+            writer.write("没找到映射:"+requestMethod+" "+requestPath);
+            writer.flush();
+            writer.close();
         }
     }
 }
