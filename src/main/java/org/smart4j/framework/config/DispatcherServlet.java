@@ -65,7 +65,7 @@ public class DispatcherServlet extends HttpServlet {
             String body = CodecUtil.decodeURL(StreamUtil.getString(req.getInputStream()));
             if (body != null && body.length() != 0) {
                 String[] split = body.split("&");
-                if (split != null && split.length == 2) {
+                if (split.length == 2) {
                     String paramName = split[0];
                     String paramValue = split[1];
                     paramMap.put(paramName, paramValue);
