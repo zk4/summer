@@ -18,7 +18,7 @@
 <div class="container">
 
     <h1 class="text-center">客户例表</h1>
-    <table class="table">
+    <table class="table table-striped">
         <tr>
             <th>客户名称</th>
             <th>联系人</th>
@@ -33,13 +33,24 @@
                 <td>${customer.telephone}</td>
                 <td>${customer.email}</td>
                 <td>
-                    <a class="btn btn-primary" href="${BASE}/customer_edit?id=${customer.id}">编辑</a>
-                    <a class="btn btn-danger" href="${BASE}/customer_delete?id=${customer.id}">删除</a>
+                    <a class="btn btn-primary" href="${BASE}/customer_edit?id=${customer.id}">详情</a>
+                    <a class="btn btn-danger"
+                       onclick="del('${BASE}/customer_delete?id=${customer.id}')">删除</a>
                 </td>
             </tr>
 
         </c:forEach>
     </table>
 </div>
+<script>
+    function del(deleteUrl) {
+        if (confirm("删掉吗?") === true)
+            $.get(deleteUrl, function (yes) {
+            });
+
+
+    }
+
+</script>
 </body>
 </html>

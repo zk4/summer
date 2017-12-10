@@ -15,8 +15,9 @@
 
 </head>
 <body>
-<h1>客户例表</h1>
-<table>
+<div class="container">
+<h1 class="text-center">客户例表</h1>
+<table class="table">
     <tr>
         <th>客户名称</th>
         <th>联系人</th>
@@ -35,5 +36,6 @@
 
 
 </table>
+</div>
 </body>
 </html>
