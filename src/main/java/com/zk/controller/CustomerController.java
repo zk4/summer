@@ -1,10 +1,13 @@
-package org.smart4j.framework.controller;
+package com.zk.controller;
 
 import org.smart4j.framework.annotation.Action;
 import org.smart4j.framework.annotation.Controller;
 import org.smart4j.framework.annotation.Inject;
-import org.smart4j.framework.model.Customer;
-import org.smart4j.framework.service.CustomerService;
+import org.smart4j.framework.controller.Data;
+import org.smart4j.framework.controller.Param;
+import org.smart4j.framework.controller.View;
+import com.zk.model.Customer;
+import com.zk.service.CustomerService;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +28,13 @@ public class CustomerController {
 //        req.setAttribute("customerList",customerList);
 //        req.getRequestDispatcher("/WEB-INF/view/customer.jsp").forward(req,resp);
 //    }
+
+    @Action("post:/")
+    public View post(Param param){
+        List<Customer> customerList = customerService.getCustomerList();
+        return new View("customer.jsp").addModel("customerList",customerList);
+    }
+
 @Action("get:/")
 public View index(Param param){
     List<Customer> customerList = customerService.getCustomerList();
@@ -44,7 +54,7 @@ public View index(Param param){
 
     @Action("get:/customer_create")
     public View create(Param param){
-        return new  View("customer_create.jsp");
+        return new  View("customer_edit.jsp");
     }
 
     @Action("post:/customer_create")

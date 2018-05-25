@@ -1,9 +1,9 @@
-package org.smart4j.framework.config;
+package org.smart4j.framework.core;
 
+import org.smart4j.framework.config.ConfigHelper;
 import org.smart4j.framework.controller.Data;
 import org.smart4j.framework.controller.Param;
 import org.smart4j.framework.controller.View;
-import org.smart4j.framework.core.Handler;
 import org.smart4j.framework.util.*;
 
 import javax.servlet.ServletConfig;
@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -53,26 +51,16 @@ public class DispatcherServlet extends HttpServlet {
         if (handler != null) {
             Class<?> controllerClass = handler.getControllerClass();
             Object bean = BeanHelper.getBean(controllerClass);
-            HashMap<String, Object> paramMap = new HashMap<>();
-            Enumeration<String> parameterNames =
-                    req.getParameterNames();
-            while (parameterNames.hasMoreElements()) {
-                String paramName = parameterNames.nextElement();
-                String paramValue = req.getParameter(paramName);
-                paramMap.put(paramName, paramValue);
-            }
 
-            String body = CodecUtil.decodeURL(StreamUtil.getString(req.getInputStream()));
-            if (body != null && body.length() != 0) {
-                String[] split = body.split("&");
-                if (split.length == 2) {
-                    String paramName = split[0];
-                    String paramValue = split[1];
-                    paramMap.put(paramName, paramValue);
-                }
-            }
+            Map<String, String[]> paramMap = req.getParameterMap();
+
+
+            //todo 将parameter body转换为对应的 Action 参数
+//            String body = CodecUtil.decodeURL(StreamUtil.getString(req.getInputStream()));
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            Customer c = objectMapper.readValue(req.getInputStream(), Customer.class);
+
             Param param = new Param(paramMap);
-
             Method actionMethod =
                     handler.getActionMethod();
 

@@ -1,10 +1,10 @@
-package org.smart4j.framework.service;
+package com.zk.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.smart4j.framework.annotation.Service;
 import org.smart4j.framework.annotation.Transaction;
-import org.smart4j.framework.model.Customer;
+import com.zk.model.Customer;
 import org.smart4j.framework.util.DataBaseHelper;
 
 import java.util.List;

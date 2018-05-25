@@ -1,4 +1,4 @@
-package org.smart4j.framework.model;
+package com.zk.model;
 
 /**
  * Created by zk on 01/11/2017.

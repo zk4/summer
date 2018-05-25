@@ -1,9 +1,9 @@
-package org.smart4j.framework.service;
+package com.zk.service;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.smart4j.framework.model.Customer;
+import com.zk.model.Customer;
 import org.smart4j.framework.util.DataBaseHelper;
 
 import java.util.HashMap;
