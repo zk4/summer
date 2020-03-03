@@ -1,5 +1,7 @@
 package com.zk.model;
 
+import java.util.List;
+
 /**
  * Created by zk on 01/11/2017.
  */
@@ -11,7 +13,7 @@ public class Customer {
     private String telephone;
     private String email;
     private String remark;
-
+    private List<String> alias;
     @Override
     public String toString() {
         return "Customer{" +
@@ -22,6 +24,15 @@ public class Customer {
                 ", email='" + email + '\'' +
                 ", remark='" + remark + '\'' +
                 '}';
+    }
+
+    public List<String> getAlias() {
+        return alias;
+    }
+
+    public Customer setAlias(List<String> alias) {
+        this.alias = alias;
+        return this;
     }
 
     public String getName() {

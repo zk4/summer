@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import com.zk.model.Customer;
-import org.smart4j.framework.util.DataBaseHelper;
+import org.summer.framework.util.DataBaseHelper;
 
 import java.util.HashMap;
 import java.util.List;

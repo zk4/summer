@@ -1,0 +1,14 @@
+<?xml version="1.0" ending="UTF-8" ?>
+<persons>
+    <person>
+        <name>刘正青</name>
+        <age>31</age>
+    </person>
+    <person>
+        <name>周杰伦</name>
+        <age>35</age>
+    </person>
+
+
+</persons>
+
